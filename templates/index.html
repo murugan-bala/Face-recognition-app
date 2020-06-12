@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+<head>
+	<title>Image Recoginition demo</title>
+	<meta charset='utf-8'>
+	<link rel="stylesheet" href="{{ url_for('static', filename= 'css/main.css') }}" type="text/css" media="all">
+	<script src="static/js/jquery-1.12.4.min.js"></script>
+	<script src="static/js/capture.js">
+	</script>
+	<script>
+	function loadfile(){
+		const reader = new FileReader();
+
+		  reader.addEventListener("load", function () {
+			// convert image file to base64 string
+			$('#preview').attr('src', reader.result);
+		  }, false);
+
+		  if ($('#photofile')[0].files[0]) {
+			reader.readAsDataURL($('#photofile')[0].files[0]);
+			}
+	}
+	function verifyPhoto(){
+	$('.pro').show();
+		$.ajax({
+		  method: "POST",
+		  url: "http://localhost:5030/verifyPhoto",
+		  data: JSON.stringify({
+			img1 : $('#preview').attr('src'),
+			img2 : $('#photo').attr('src')
+		  }),
+		  contentType: "application/json",
+		  dataType: 'json'
+		}).done(function( msg ) {
+	$('.pro').hide();
+			if(msg.response == "Photo Matched"){
+				$('h2').html('<span>'+msg.response+'</span>')
+			}else{
+				$('h2').html('<span class="err">'+msg.response+'</span>')
+			}
+		});
+	}
+	</script>
+</head>
+<body>
+<div class="contentarea">
+	<h1>
+		Face recognition demo...
+	</h1>
+	<p>
+		This example demonstrates how to recognition face using your built-in webcam .
+	</p>
+ <input type="file" id="photofile" onchange="loadfile()">
+ <img id="preview" style="width: 200px;">
+  <div class="camera">
+    <video id="video">Video stream not available.</video>
+    <button id="startbutton">Take photo</button> 
+  </div>
+  <canvas id="canvas">
+  </canvas>
+  <div class="output">
+    <img id="photo" alt="The screen capture will appear in this box."> 
+  </div>
+  
+  <button type="button" id="verify" onclick="verifyPhoto()">Verify</button>
+  <span class="pro">Processing....</span>
+  
+  <h2></h2>
+</div>
+</body>
+</html>
+
+
