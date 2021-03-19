@@ -7,7 +7,7 @@ Jinja2==2.10.1
 MarkupSafe==1.1.1
 Werkzeug==0.15.5
 numpy>=1.9.2
-Pillow==7.1.1
+#Pillow==7.1.1
 face_recognition
 requests
 
